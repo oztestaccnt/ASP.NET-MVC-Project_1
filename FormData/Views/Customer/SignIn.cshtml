@@ -1,0 +1,51 @@
+﻿@using FormData.Models
+@model CustomerViewModel
+
+@{
+    ViewBag.Title = "SignIn";
+}
+
+<h2>SignIn</h2>
+
+@{
+    ViewBag.Title = "Sign In";
+}
+<div class="font-md">Customer Sign In</div>
+<div class="well">
+    <form method="post" class="form-horizontal">
+        @Html.AntiForgeryToken()
+
+        @* From CustomerViewModel class, Attribute - [Required]  *@
+        @*ValidationSummary - false means - display all errors*@
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <!-- CompanyName List -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerId, "Company Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control signin-form" })
+            </div>
+        </div>
+        <!-- Password -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter Password" })
+
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!-- Submit button -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-default">Sign In</button>
+            </div>
+        </div>
+        <!-- Submit button -->
+    </form>
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval");
+}
+
