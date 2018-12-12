@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Product";
+    int CustomerID = Request.IsAuthenticated ? Convert.ToInt32(User.Identity.Name) : -1;
 }
 
 <div id="alert-search" class="alert alert-info alert-dismissable fade in" style="position:fixed;">
@@ -146,6 +147,11 @@
             var ProductID;
 
             $('#products').on('click', '.product-row', function () {
+
+                if (@CustomerID == -1) {
+                    // disable the button or something
+                    alert("Not allowed to add to cart");
+                }
                 //alert(this.id);
                 ProductID = this.id;
                 // display selected product's name & price in modal
@@ -171,6 +177,20 @@
             $('#Quantity').change(function () {
                 var total = $(this).val() * $('#UnitPrice').html();
                 $('#Total').html(total.toFixed(2));
+            });
+
+            $('#AddToCart').click(function () {
+                $('#myModal').modal('hide');
+                // ajax POST request
+                var url = "@Url.Content("~")Cart/AddToCart";
+                // var postData = "{ ProductID : ProductID, CustomerID : @CustomerID, Quantity : $('#Quantity').val()}";
+                $.post(url, { ProductID : ProductID, CustomerID : @CustomerID, Quantity : $('#Quantity').val()}).always(function (data, textStatus, statusObject) {
+                    if (statusObject == 200) {
+                        console.log($('#name_' + ProductID).html() + ' added to cart ')
+                    }
+                    });
+
+                
             });
         });
     </script>
